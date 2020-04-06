@@ -11,7 +11,7 @@ OAREPO_VERSION = os.environ.get('OAREPO_VERSION', '3.1.1')
 
 install_requires = [
     'python-slugify>=3.0.2',
-    'webargs>=5.3.2,<6.0.0',
+    'webargs>=5.3.2,<7.0.0',
     'wrapt>=1.11.0',
     'openpyxl>=3.0.1',
     'oarepo-references>=1.4.0',
