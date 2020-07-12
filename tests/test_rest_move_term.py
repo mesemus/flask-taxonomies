@@ -1,5 +1,13 @@
 import json
 
+from link_header import parse, LinkHeader, Link
+
+
+def links2dict(links):
+    return {
+        l.rel: l.href for l in links.links
+    }
+
 
 def term_move_to_root_test(api, client, sample_taxonomy):
     resp = client.post('/api/2.0/taxonomies/test/a/aa', headers={
@@ -20,9 +28,17 @@ def term_move_to_root_test(api, client, sample_taxonomy):
     resp = client.get('/api/2.0/taxonomies/test/a/aa')
     assert resp.status_code == 301
     assert resp.headers['Location'] == 'http://localhost/api/2.0/taxonomies/test/aa'
+    links = parse(resp.headers['Link'])
+    assert links2dict(links) == {
+        'self': 'http://localhost/api/2.0/taxonomies/test/a/aa',
+        'obsoleted_by': 'http://localhost/api/2.0/taxonomies/test/aa'
+    }
     assert resp.json == {
-        'links': {'self': 'http://localhost/api/2.0/taxonomies/test/aa'},
-        'status': 'deleted'
+        'links': {
+            'obsoleted_by': 'http://localhost/api/2.0/taxonomies/test/aa',
+            'self': 'http://localhost/api/2.0/taxonomies/test/a/aa'
+        },
+        'status': 'moved'
     }
 
 
@@ -52,6 +68,9 @@ def term_move_to_element_test(api, client, sample_taxonomy):
     assert resp.status_code == 301
     assert resp.headers['Location'] == 'http://localhost/api/2.0/taxonomies/test/a/b'
     assert resp.json == {
-        'links': {'self': 'http://localhost/api/2.0/taxonomies/test/a/b'},
-        'status': 'deleted'
+        'links': {
+            'obsoleted_by': 'http://localhost/api/2.0/taxonomies/test/a/b',
+            'self': 'http://localhost/api/2.0/taxonomies/test/b'
+        },
+        'status': 'moved'
     }

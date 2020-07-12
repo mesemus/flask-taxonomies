@@ -1110,12 +1110,15 @@ $ curl -i 'http://127.0.0.1:5000/api/2.0/taxonomies/test/term/nested'
 
 HTTP/1.0 301 MOVED PERMANENTLY
 Location: http://127.0.0.1:5000/api/2.0/taxonomies/test/nested
+Link: <http://localhost/api/2.0/taxonomies/test/term/nested>; rel=self
+Link: <http://localhost/api/2.0/taxonomies/test/nested>; rel=obsoleted_by
 
 {
     "links": {
-        "self": "http://127.0.0.1:5000/api/2.0/taxonomies/test/nested"
+        "self": "http://localhost/api/2.0/taxonomies/test/term/nested", 
+        "obsoleted_by": "http://localhost/api/2.0/taxonomies/test/nested"
     }, 
-    "status": "deleted"
+    "status": "moved"
 }
 ```
 
@@ -1147,12 +1150,15 @@ $ curl -i 'http://127.0.0.1:5000/api/2.0/taxonomies/test/nested'
 
 HTTP/1.0 301 MOVED PERMANENTLY
 Location: http://127.0.0.1:5000/api/2.0/taxonomies/test/renamed-nested
+Link: <http://localhost/api/2.0/taxonomies/test/nested>; rel=self
+Link: <http://localhost/api/2.0/taxonomies/test/renamed-nested>; rel=obsoleted_by
 
 {
     "links": {
-        "self": "http://127.0.0.1:5000/api/2.0/taxonomies/test/renamed-nested"
+        "self": "http://localhost/api/2.0/taxonomies/test/nested", 
+        "obsoleted_by": "http://localhost/api/2.0/taxonomies/test/renamed-nested"
     }, 
-    "status": "deleted"
+    "status": "moved"
 }
 ```
 

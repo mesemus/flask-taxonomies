@@ -4,6 +4,7 @@ from urllib.parse import urljoin, urlparse
 
 import sqlalchemy
 from flask import Response, abort, current_app, jsonify, request
+from link_header import Link, LinkHeader
 from sqlalchemy.orm.exc import NoResultFound
 from webargs.flaskparser import use_kwargs
 
@@ -84,10 +85,11 @@ def get_taxonomy_term(code=None, slug=None, prefer=None, page=None, size=None, s
             obsoleted_by = term.obsoleted_by
             obsoleted_by_links = obsoleted_by.links()
             return Response(json.dumps({
-                'links': obsoleted_by_links.envelope,
-                'status': term.status.name
+                'links': term.links(representation=prefer).envelope,
+                'status': 'moved'
             }), status=301, headers={
-                'Location': obsoleted_by_links.headers['self']
+                'Location': obsoleted_by_links.headers['self'],
+                'Link': str(LinkHeader([Link(v, rel=k) for k, v in term.links(representation=prefer).envelope.items()]))
             }, content_type='application/json')
         else:
             json_abort(410, {

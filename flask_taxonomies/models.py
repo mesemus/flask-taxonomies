@@ -320,7 +320,10 @@ class TaxonomyTerm(Base):
         if INCLUDE_LEVEL in representation:
             resp['level'] = self.level + 1
         if INCLUDE_STATUS in representation:
-            resp['status'] = self.status.name if self.status else None
+            if self.status in (TermStatusEnum.deleted, TermStatusEnum.delete_pending) and self.obsoleted_by_id:
+                resp['status'] = 'moved'
+            else:
+                resp['status'] = self.status.name if self.status else None
         if INCLUDE_DATA in representation and self.extra_data:
             resp.update(current_flask_taxonomies.extract_data(representation, self))
         if INCLUDE_DESCENDANTS_COUNT in representation and hasattr(self, 'descendants_count'):
@@ -342,6 +345,12 @@ class TaxonomyTerm(Base):
         all_links['self'] = self_link
         if INCLUDE_URL in representation:
             links['self'] = self_link
+
+        if self.obsoleted_by_id:
+            obslinks = self.obsoleted_by.links(representation)
+            all_links['obsoleted_by'] = obslinks.envelope['self']
+            if INCLUDE_URL in representation:
+                links['obsoleted_by'] = obslinks.envelope['self']
 
         descendants_link = current_flask_taxonomies.taxonomy_term_url(self, descendants=True)
         all_links['tree'] = descendants_link
