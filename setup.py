@@ -7,7 +7,6 @@ requires = [
     'sqlalchemy-utils',
     'python-slugify',
     'jsonpatch',
-    'flask-migrate',
     'webargs<6.0.0',
     'jsonpointer',
     'LinkHeader',
@@ -35,7 +34,8 @@ setup(
     extras_require={
         'tests': tests_require,
         'postgresql': ['psycopg2'],
-        'sqlite': []
+        'sqlite': [],
+        'migrate': ['flask-migrate']
     },
     license='Creative Commons Attribution-Noncommercial-Share Alike license',
     long_description=open('README.md').read(),
