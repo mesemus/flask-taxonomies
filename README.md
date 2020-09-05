@@ -396,6 +396,26 @@ Note also the:
      ``true`` for ancestor term
    * ``parent`` - adds link to the parent within ``links`` section
 
+Even one-term result is rendered as array:
+
+```console
+$ curl -i -H "Prefer: return=representation; include=anl ant par" \
+  http://127.0.0.1:5000/api/2.0/taxonomies/country/europe
+
+HTTP/1.0 200 OK
+Link: <http://127.0.0.1:5000/api/2.0/taxonomies/country/europe>; rel=self
+Link: <http://127.0.0.1:5000/api/2.0/taxonomies/country/europe?representation:include=dsc>; rel=tree
+
+[
+  {
+    "links": {
+      "self": "http://127.0.0.1:5000/api/2.0/taxonomies/country/europe"
+    },
+    "is_ancestor": false
+  }
+]
+```
+
 **Include data in response**
 
 This is the default setting unless ``minimal`` representation is selected. In this case,
