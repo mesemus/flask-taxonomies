@@ -5,9 +5,10 @@ from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.utils import cached_property
 
 from flask_taxonomies.constants import (
+    INCLUDE_ANCESTOR_LIST,
     INCLUDE_ANCESTORS_HIERARCHY,
     INCLUDE_ENVELOPE,
-    INCLUDE_SELF, INCLUDE_ANCESTOR_LIST,
+    INCLUDE_SELF,
 )
 from flask_taxonomies.models import EnvelopeLinks
 
